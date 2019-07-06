@@ -25,19 +25,25 @@ GET /report
 - `200 OK` on success
 
 ```JSON
-[{
-	"api-gateway": "17",
-	[{
-		"ffd3082fe09d": "11"
+[
+	{
+		"api-gateway": "17",
+		"instances": [
+			{
+				"ffd3082fe09d": "11"
+			},{
+				"ffd3082fe09da": "6"
+			}
+		]
 	},{
-		"ffd3082fe09da": "6"
-	}]
-},{
-	"some-other": "2",
-	[{
-		"ffd3082fe09d": "2"
-	}]
-}]
+		"some-other": "2",
+		"instances": [
+			{
+				"ffd3082fe09d": "2"
+			}
+		]
+	}
+]
 ```
 
 or 
