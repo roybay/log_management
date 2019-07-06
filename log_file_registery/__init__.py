@@ -7,6 +7,7 @@ from flask import Flask
 from flask import jsonify
 from flask import request
 from flask_pymongo import PyMongo
+from werkzeug import secure_filename
 
 UPLOAD_FOLDER = '/opt/uploads'
 ALLOWED_EXTENSIONS = set(['txt', 'log'])
@@ -63,3 +64,21 @@ def add_logs():
 
   return jsonify(output)
   #return str(log_id)
+
+@app.route('/upload', methods = ['GET', 'POST'])
+def upload_file():
+   if request.method == 'POST':
+      f = request.files['file']
+      f.save(secure_filename(f.filename))
+      return 'file uploaded successfully'
+    
+if __name__ == '__main__':
+   app.run(debug = True)
+
+
+
+
+
+
+
+
