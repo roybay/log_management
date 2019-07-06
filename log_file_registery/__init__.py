@@ -29,9 +29,9 @@ mongo = PyMongo(app)
 # Rest API Documentation
 @app.route("/apidocs")
 def index():
-    print('README file', file=sys.stderr)
+    print('RestAPI Documentation', file=sys.stderr)
     """Present API Documentation"""
-    with open(os.path.dirname(app.root_path) + '/README.md', 'r') as markdown_file:
+    with open(os.path.dirname(app.root_path) + '/APIDocs.md', 'r') as markdown_file:
 
       # Read the content of the API Doc
       content = markdown_file.read()
@@ -80,20 +80,11 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploaded_file',
                                     filename=filename))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <p><input type=file name=file>
-         <input type=submit value=Upload>
-    </form>
-    '''
-    
+    return render_template('uploader.html')
+
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 
