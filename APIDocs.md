@@ -55,6 +55,25 @@ or
 
 **Definition**
 
+GET /logs
+
+**Response**
+
+- `200 OK` on success
+
+```JSON
+[{
+    "_id": "5d20fca8e2699aecef3a489f",
+    "date": "2018-07-02T17:54:15.294Z",
+    "instance_id": "ffd3082fe09d",
+    "log_trace": "Sample Log Message",
+    "service_name": "api-gateway"
+}]
+```
+---
+
+**Definition**
+
 POST /logs
 
 **Parameters**
@@ -87,15 +106,54 @@ POST /logs
 }
 ```
 ---
+
 **Definition**
 
-POST /uploads/<path:filename>
+GET / uploader
 
-**Parameters**
+**Response**
 
-- `filename` String
+- `200 OK` on success
 
-**Responses**
+```HTML
+<!doctype html>
+<title>Upload New Log File</title>
+<h1>Upload New Log File</h1>
+<body>
+    <form method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+</body>
+```
+---
+
+**Definition**
+
+POST / uploader
+
+**Response**
+
+- `302 Found` on success
+- Redirects to `/uploads/<FILE_NAME>`
+
+---
+
+**Definition**
+
+GET /uploads/<FILE_NAME>
+
+**Response**
 
 - `201 Created` on success
+
+```JSON
+{
+    "_id": "5d20fca8e2699aecef3a489f",
+    "date": "2018-07-02T17:54:15.294Z",
+    "instance_id": "ffd3082fe09d",
+    "log_trace": "Sample Log Message",
+    "service_name": "api-gateway"
+}
+```
 

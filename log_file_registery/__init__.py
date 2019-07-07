@@ -39,6 +39,14 @@ def index():
       # Convert to HTML
       return markdown.markdown(content)
 
+# Get Logs via JSON object
+@app.route('/logs', methods=['GET'])
+def get_logs():
+  logdb = mongo.db.logdb
+  
+  all_log = list(logdb.find())
+  return jsonify(all_log)
+  
 # Add Log via JSON object
 @app.route('/logs', methods=['POST'])
 def add_logs():
@@ -49,14 +57,12 @@ def add_logs():
   instance_id = request.json['instance_id']
   log_trace = request.json['log_trace']
 
-  log_id = logdb.insert({'date': date, 'service_name': service_name, 'instance_id': instance_id, 'log_trace': log_trace})
-  #new_log = logdb.find({ "_id": "5d20f7e24c1a75a0195f52b6" })
-  new_log = logdb.find_one({'_id': ObjectId(log_id)})
-  output = {'_id' : str(new_log['_id']), 'date' : new_log['date'], 'service_name' : new_log['service_name'], 'instance_id' : new_log['instance_id'], 'log_trace' : new_log['log_trace']}
-  #output = { 'service_name' : new_log['service_name'], 'instance_id' : new_log['instance_id'], 'log_trace' : new_log['log_trace']}
-
+  log_id = logdb.insert({'_id': str(ObjectId()),'date': date, 'service_name': service_name, 'instance_id': instance_id, 'log_trace': log_trace})
+  new_log = logdb.find_one({'_id': log_id})
+  output = {'_id' : new_log['_id'], 'date' : new_log['date'], 'service_name' : new_log['service_name'], 'instance_id' : new_log['instance_id'], 'log_trace' : new_log['log_trace']}
+  
   return jsonify(output)
-  #return str(log_id)
+  
 
 def allowed_file(filename):
     return '.' in filename and \
