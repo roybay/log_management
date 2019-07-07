@@ -3,7 +3,7 @@ import sys
 import json
 
 
-filepath = 'log2.txt'  
+filepath = '/Users/rbahian/Desktop/repos/personal/Log_Management/logs_management/test_files/log2.txt'  
 
 def split_line(log_file):
     with open(log_file, "r") as logs:
