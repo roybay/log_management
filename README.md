@@ -48,6 +48,8 @@ http://localhost:3030/apidocs
 1.	Functional requirements
 1. 	Test cases
 1.	Auto test scripts need to be added.
+1.	Alert manager where it can trace critical messages and send notification in order to privent system outages. 
+ 
 
 
 
