@@ -159,4 +159,45 @@ GET /uploads/<FILE_NAME>
     "service_name": "api-gateway"
 }
 ```
+---
 
+**Definition**
+
+GET /search
+
+**Parameters**
+
+Query Strings
+- `service_name` String
+- `instance_id` String
+- `search` String
+
+Ex: It works with any combination. 
+/search?service_name=api-gateway
+/search?instance_id=ffd3082fe09d
+/search?search=error
+/search?service_name=api-gateway&instance_id=ffd3082fe09d&search=error
+
+ 
+**Response**
+
+- `200 OK` on success
+
+```JSON
+[
+  {
+    "_id": "5d22ba4179d06807ba34076d", 
+    "date": "2018-07-02T17:54:14.290Z", 
+    "instance_id": "ffd3082fe09d", 
+    "log_trace": "2018/07/02 17:54:14 [error] 37#0: *1013 [lua] responses.lua:121: access(): /usr/local/share/lua/5.1/pgmoon/init.lua:233: attempt to index local 'sock' (a nil value), client: 181.171.1.54, server: kong, request: \"GET /socket.io/?EIO=3&transport=websocket HTTP/1.1\", host: \"api.pager.com\"\n", 
+    "service_name": "api-gateway"
+  }, 
+  {
+    "_id": "5d22ba4179d06807ba34076f", 
+    "date": "2018-07-02T17:54:15.294Z", 
+    "instance_id": "ffd3082fe09d", 
+    "log_trace": "2018/07/02 17:54:15 [error] 37#0: *676 lua coroutine: runtime error: /usr/local/share/lua/5.1/pgmoon/init.lua:233: attempt to index local 'sock' (a nil value)\n", 
+    "service_name": "api-gateway"
+  }
+]
+```

@@ -153,9 +153,8 @@ def reprot_logs():
         serviceObj['instances'].append(instanceObj)
       response['details'].append(serviceObj)  
     return jsonify(response)
-    #return str(service_name)
 
-@app.route('/test', methods=['GET'])
+@app.route('/search', methods=['GET'])
 def test_logs():
     logdb = mongo.db.logdb
     jsonObject={}
