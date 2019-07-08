@@ -25,7 +25,9 @@ GET /report
 - `200 OK` on success
 
 ```JSON
-[
+{
+	"total_error": "19",
+	"details":[
 	{
 		"api-gateway": "17",
 		"instances": [
@@ -43,7 +45,8 @@ GET /report
 			}
 		]
 	}
-]
+	]
+}
 ```
 
 or 

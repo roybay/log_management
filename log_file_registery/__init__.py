@@ -14,6 +14,7 @@ from flask import send_from_directory
 from flask import render_template
 from flask_pymongo import PyMongo
 from werkzeug import secure_filename
+from bson import json_util
 
 UPLOAD_FOLDER = '/opt/uploads'
 ALLOWED_EXTENSIONS = set(['txt', 'log'])
@@ -64,6 +65,22 @@ def set_log():
   output = {'_id' : new_log['_id'], 'date' : new_log['date'], 'service_name' : new_log['service_name'], 'instance_id' : new_log['instance_id'], 'log_trace' : new_log['log_trace']}
   
   return jsonify(output)
+
+@app.route('/logs', methods=['POST'])
+def set_logs():
+  logdb = mongo.db.logdb
+  reqList = request.json
+  logList = []
+  for reqObj in reqList['data']:
+    date = reqObj['date']
+    service_name = reqObj['service_name']
+    instance_id = reqObj['instance_id']
+    log_trace = reqObj['log_trace']
+    logObj = {'_id': str(ObjectId()),'date': date, 'service_name': service_name, 'instance_id': instance_id, 'log_trace': log_trace}
+    logList.append(logObj)
+  new_logs = logdb.insert_many(logList)
+  #print(jsonify(new_logs.json))
+  return str(new_logs)
   
 def allowed_file(filename):
     return '.' in filename and \
@@ -85,33 +102,15 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file', filename=filename))
+            return upload_file_data(file.filename)
     return render_template('uploader.html')
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-@app.route('/log_files', methods=['GET', 'POST'])
-def insert_file():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit a empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return insert_file_data(file.filename)
-    return render_template('uploader.html')
-
-def insert_file_data(logfile):
+def upload_file_data(logfile):
+    logdb = mongo.db.logdb
     filename = UPLOAD_FOLDER + '/' + logfile
     jsonList=[]
     with open(filename, "r") as logs:
@@ -125,8 +124,53 @@ def insert_file_data(logfile):
         instance_id = tmp[0]
         tmp = tmp[1].split(": ", 1)
         log_trace = tmp[1]
-        jsonObject = { 'date': date, 'service_name': service_name, 'instance_id': instance_id, 'log_trace': log_trace }
+        jsonObject = { '_id': str(ObjectId()), 'date': date, 'service_name': service_name, 'instance_id': instance_id, 'log_trace': log_trace }
         jsonList.append(jsonObject)
-    return jsonify({'data': jsonList})
+    
+    new_logs = logdb.insert_many(jsonList)
+    #print(jsonify(new_logs.json))
+    return str(new_logs)
+
+@app.route('/report', methods=['GET'])
+def reprot_logs():
+    logdb = mongo.db.logdb
+    searchObject={ '$regex': ".*error.*" }
+    response={}
+    total_error = logdb.find({'log_trace': searchObject}).count()
+    response['total_error']=total_error
+    response['details']=[]
+    service_names = logdb.distinct('service_name')
+    instance_ids = logdb.distinct('instance_id')
+    for sname in service_names:
+      jsonObject = {"service_name": sname, "log_trace": searchObject}
+      service_name = logdb.find(jsonObject).count()
+      serviceObj={sname: service_name}
+      serviceObj['instances']=[]
+      for ins_id in instance_ids:
+        jsonObject = {"service_name": sname, "instance_id": ins_id, "log_trace": searchObject}
+        instance_id = logdb.find(jsonObject).count()
+        instanceObj={ins_id: instance_id}
+        serviceObj['instances'].append(instanceObj)
+      response['details'].append(serviceObj)  
+    return jsonify(response)
+    #return str(service_name)
+
+@app.route('/test', methods=['GET'])
+def test_logs():
+    logdb = mongo.db.logdb
+    jsonObject={}
+    if request.args.get("service_name"):
+      service_name  = request.args.get("service_name")
+      jsonObject['service_name']=service_name
+    if request.args.get("instance_id"):
+      instance_id  = request.args.get("instance_id")
+      jsonObject['instance_id']=instance_id
+    if request.args.get("search"):
+      search  = request.args.get("search")
+      jsonObject['log_trace']={ '$regex': ".*"+ search +".*" }
+  
+    logs = list(logdb.find(jsonObject))
+    return jsonify(logs)
+
 
 
