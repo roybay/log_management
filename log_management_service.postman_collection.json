@@ -1,0 +1,185 @@
+{
+	"info": {
+		"_postman_id": "ed03ac18-d2f9-4cc2-9658-f4b76c08c097",
+		"name": "Dockerized_Log",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/apidocs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3030/apidocs",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"apidocs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/logs",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3030/report",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"report"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/log",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"date\": \"2018-07-02T17:54:14.290Z\", \n\t\"service_name\": \"api-gateway\", \n\t\"instance_id\": \"ffd3082fe09d\", \n\t\"log_trace\": \"2018/07/02 17:54:14 [error] 37#0: *1013 [lua] responses.lua:121: access(): /usr/local/share/lua/5.1/pgmoon/init.lua:233: attempt to index local 'sock' (a nil value), client: 181.171.1.54, server: kong, request: \\\"GET /socket.io/?EIO=3&transport=websocket HTTP/1.1\\\", host: \\\"api.pager.com\\\"\\n\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3030/log",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"log"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/uploader",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3030/uploader",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"uploader"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/uploads/<FILENAME>",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3030/uploads/log.txt",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"uploads",
+						"log.txt"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/logs",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"data\": [\n    {\n      \"date\": \"2018-07-02T17:54:14.290Z\", \n      \"instance_id\": \"ffd3082fe09d\", \n      \"log_trace\": \"2018/07/02 17:54:14 [error] 37#0: *1013 [lua] responses.lua:121: access(): /usr/local/share/lua/5.1/pgmoon/init.lua:233: attempt to index local 'sock' (a nil value), client: 181.171.1.54, server: kong, request: \\\"GET /socket.io/?EIO=3&transport=websocket HTTP/1.1\\\", host: \\\"api.pager.com\\\"\\n\", \n      \"service_name\": \"api-gateway\"\n    }, \n    {\n      \"date\": \"2019-07-02T17:54:14.290Z\", \n      \"instance_id\": \"zfd3082fe09d\", \n      \"log_trace\": \"181.171.1.54 - - [02/Jul/2018:17:54:14 +0000] \\\"GET /socket.io/?EIO=3&transport=websocket HTTP/1.1\\\" 500 54 \\\"-\\\" \\\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36\\\"\\n\", \n      \"service_name\": \"zpi-gateway\"\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "localhost:3030/logs",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"logs"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "02457ec8-7b2a-48e6-b6e1-9ebabc6c9d9f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "605b24fa-62b8-49a2-806d-ee1b4762fd9a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
