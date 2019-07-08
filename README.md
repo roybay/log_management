@@ -3,11 +3,12 @@
 This repo is build for demo purposes.
 
 ## Assumption:
-Environment has many services and each service has many instances. 
-Log files manually added to the log management services for this demo.
-Authorization and authentication are ignored on this demo. 
-DB design and optimization are ignored on this demo. 
-All servers use non-ssl ports
+
+1.	Environment has many services and each service has many instances. 
+1.	Log files manually added to the log management services for this demo.
+1.	Authorization and authentication are ignored on this demo. 
+1.	DB design and optimization are ignored on this demo. 
+1.	All servers use non-ssl ports
 
 
 
